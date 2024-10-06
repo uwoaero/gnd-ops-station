@@ -1,0 +1,4 @@
+influxdb-client==1.46.0
+pymavlink==2.4.41
+pyserial==3.5
+python-dotenv==1.0.1
