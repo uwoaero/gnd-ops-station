@@ -11,9 +11,13 @@
 
 2. Setup InfluxDB
     - Go to localhost:8086 and setup influxdb
+    - Create the user and org as "westernaerodesign""
+    - Get an InfluxDB_Token and add to .env file
 
 3. Setup Grafana
     - Go to localhost:3000 and setup grafana
+    - Go to sources and select InfluxDB as datasource
+    - Setup datasource using InfluxDB_Token and other information
     
 ### Setting up a Python Virtual Environment
 
