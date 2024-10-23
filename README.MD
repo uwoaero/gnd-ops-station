@@ -4,20 +4,30 @@
 
 ### Start Grafana & InfluxDB
 
-1. Start containers (ensure docker is installed and running):
+1. Start kafka:
+    cd into kafka folder
+
+    Start zookeeper:
     ```
-    docker-compose up -d
+    .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+    ```
+
+    (In a seperate terminal) Start kafka:
+    ```
+    .\bin\windows\kafka-server-start.bat .\config\server.properties
     ```
 
 2. Setup InfluxDB
-    - Go to localhost:8086 and setup influxdb
-    - Create the user and org as "westernaerodesign""
-    - Get an InfluxDB_Token and add to .env file
+    - cd into InfluxData/influxdb
+    - start influxdb:
 
-3. Setup Grafana
-    - Go to localhost:3000 and setup grafana
-    - Go to sources and select InfluxDB as datasource
-    - Setup datasource using InfluxDB_Token and other information
+    ```
+    .\influxd
+    ```
+    
+    Go to localhost:8086 and setup influxdb
+    - Create the user and org as "westernaerodesign"
+    - Get an InfluxDB_Token and add to .env file
     
 ### Setting up a Python Virtual Environment
 
@@ -35,6 +45,13 @@
    pip install -r requirements.txt
    ```
 
+### Install Node libraries
+Install kafka:
+    ```
+    npm i kafkajs
+    ```
+
+
 ### Start Ingestion
 
 1. Plug in flight controller to usb or usb-c
@@ -43,9 +60,14 @@
     - Windows: check "Ports (COM & PLT)" in Device Manager
     - Mac: idk but probably some "/dev/tty" thing
 
-3. Edit connection_string in telemetry_ingestion.py
+3. Edit connection_string in ground-station.py
 
-3. Start gngestion script:
+3. Start ingestion script:
     ```
-    python telemetry_ingestion.py
+    python ground-station.py
+    ```
+
+4. Start js server:
+    ```
+    node server.js
     ```
