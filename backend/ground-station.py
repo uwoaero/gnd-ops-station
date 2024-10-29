@@ -18,7 +18,7 @@ if token == None:
 
 #connect to influx
 org = "Ground Station"
-url = "http://localhost:8086"
+url = "http://influxdb:8086"
 bucket="Telemetry"
 
 
@@ -48,7 +48,7 @@ def startKafka():
 
     #initialize kafka producer
     producer = KafkaProducer(
-        bootstrap_servers=['localhost:9092'],
+        bootstrap_servers=['broker:9092'],
         value_serializer=lambda v: json.dumps(v).encode('utf-8')
     )
     return producer

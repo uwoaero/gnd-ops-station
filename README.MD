@@ -2,37 +2,24 @@
 
 ## Get Started
 
-### Start Grafana & InfluxDB
+### Start Kafka and InfluxCB
 
-1. Start kafka:
-    cd into kafka folder
-
-    Start zookeeper:
+1. Start kafka and infuxdb using docker
     ```
-    .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+    docker-compose up -d
     ```
 
-    (In a seperate terminal) Start kafka:
-    ```
-    .\bin\windows\kafka-server-start.bat .\config\server.properties
-    ```
-
-2. Setup InfluxDB
-    - cd into InfluxData/influxdb
-    - start influxdb:
-
-    ```
-    .\influxd
-    ```
-    
-    Go to localhost:8086 and setup influxdb
-    - Create the user and org as "westernaerodesign"
-    - Get an InfluxDB_Token and add to .env file
+2. Configure InfluxDB
+    Go to localhost:8086 and sign in using the login information:
+    - Username: westernaerodesign
+    - Password: Award Shelf
+    - Generate a token and paste it into the .env file
     
 ### Setting up a Python Virtual Environment
 
 1. Create a virtual environment:
    ```
+   cd backend
    python -m venv venv
    ```
 
@@ -48,9 +35,9 @@
 ### Install Node libraries
 Install kafka:
     ```
+    cd frontend
     npm i kafkajs
     ```
-
 
 ### Start Ingestion
 
