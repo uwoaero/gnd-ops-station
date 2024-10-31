@@ -2,11 +2,16 @@
 
 ## Get Started
 
-### Start Kafka and InfluxCB
+### Start Ground Station 
 
-1. Start kafka and infuxdb using docker
+1. 
     ```
-    docker-compose up -d
+    docker-compose build
+    ```
+
+2. 
+    ```
+    docker compose up
     ```
 
 2. Configure InfluxDB
@@ -14,6 +19,8 @@
     - Username: westernaerodesign
     - Password: Award Shelf
     - Generate a token and paste it into the .env file
+
+3. View Frontend at localhost:3000
     
 ### Setting up a Python Virtual Environment
 
@@ -31,13 +38,6 @@
    ```
    pip install -r requirements.txt
    ```
-
-### Install Node libraries
-Install kafka:
-    ```
-    cd frontend
-    npm i kafkajs
-    ```
 
 ### Start Ingestion
 

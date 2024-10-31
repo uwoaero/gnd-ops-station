@@ -30,6 +30,8 @@ write_api = client.write_api(write_options=SYNCHRONOUS)
 def saveData(data):
   point = (
     Point("flight")
+    
+    #add data and time to tag, Ex flight{data}{time}
     .tag("flight", "flight2")
     .field("roll", data.roll)
     .field("pitch", data.pitch)

@@ -38,15 +38,29 @@ services:
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
   
-  backend:
+#   backend:
+#     build:
+#       context: ./
+#       dockerfile: dockerfiles/Dockerfile.backend
+#     devices: 
+#       - "/dev/COM9"
+# #ttyUSB0
+#     depends_on:
+#       - influxdb
+#       - broker
+#     env_file:
+#       - ./backend/.env
+  
+  frontend:
     build:
       context: ./
-      dockerfile: dockerfiles/Dockerfile.backend
-    depends_on:
-      - influxdb
-      - broker
-    env_file:
-      - ./backend/.env
+      dockerfile: dockerfiles/Dockerfile.frontend
+    ports: 
+      - "3000:3000"
+    # deponds_on:
+      # - backend
+    # links:
+      # - backend
 
       
 volumes:

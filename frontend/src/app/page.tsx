@@ -7,7 +7,6 @@ const kafka = new Kafka({
   brokers: ['localhost:9092'],
 })
 
-
 const consume = async () => {
 
   //create consumer instance to be part of a consumer group
@@ -22,12 +21,39 @@ const consume = async () => {
   //start consuming messages and printing in console
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.log({
-        value: message.value.toString(),
-      })
+      if(message.value){
+        console.log({
+          value: message.value.toString(),
+        })
+      } else {
+        console.log("damn")
+      }
     },
   })
 }
 
-//catch any errors
-consume().catch(console.error);
+
+export default function Home() {
+
+  return (
+    <div>
+      WESTERN AERO DESIGN GROUND STATION
+      <p>
+        GROUND SPEED
+      </p>
+      <p>
+        AIR SPEED
+      </p>
+      <p>
+        BATTERY VOLTAGE
+      </p>
+      <p>
+        LON/LAT
+      </p>
+      <p>
+        ALTITUDE
+      </p>
+
+    </div>
+  );
+}
