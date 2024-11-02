@@ -1,15 +1,17 @@
 //import kafka library
 import { Kafka } from 'kafkajs'
 
-// import {setupKafka, subscribe, consume } from "./kafkaConsumer"
+const setupKafka = async() => {
+  //initializes kafka connection for this consumer
+  const kafka = new Kafka({
+    clientId: 'gnd-station-frontend',
+    brokers: ['broker:9092'],
+  })
 
-//initializes kafka connection for this consumer
-const kafka = new Kafka({
-  clientId: 'gnd-station-frontend',
-  brokers: ['broker:29092'],
-})
+  return kafka
+}
 
-const consume = async () => {
+const subscribe = async(kafka) => {
 
   //create consumer instance to be part of a consumer group
   const consumer = kafka.consumer({ groupId: 'gnd-station-group' })
@@ -19,7 +21,11 @@ const consume = async () => {
 
   //subscribe to telemetry topic
   await consumer.subscribe({ topic: 'telemetry', fromBeginning: true })
-  
+
+  return consumer
+}
+
+const consume = async (consumer) => {
   //start consuming messages and printing in console
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
@@ -34,29 +40,4 @@ const consume = async () => {
   })
 }
 
-
-export default function Home() {
-  consume()
-
-  return (
-    <div>
-      WESTERN AERO DESIGN GROUND STATION
-      <p>
-        GROUND SPEED
-      </p>
-      <p>
-        AIR SPEED
-      </p>
-      <p>
-        BATTERY VOLTAGE
-      </p>
-      <p>
-        LON/LAT
-      </p>
-      <p>
-        ALTITUDE
-      </p>
-
-    </div>
-  );
-}
+module.exports = {setupKafka, subscribe, consume}

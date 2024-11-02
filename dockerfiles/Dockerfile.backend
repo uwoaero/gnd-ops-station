@@ -1,12 +1,10 @@
-FROM python:3.12.7
+FROM node:22
 
-WORKDIR /app
+WORKDIR /app/backend
 
-# install app dependencies
-COPY backend/requirements.txt .
+COPY backend/package*.json ./
+RUN npm install
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY backend ./
 
-COPY backend/ .
-
-CMD ["python", "ground-station.py"]
+CMD ["node", "backend.js"]
