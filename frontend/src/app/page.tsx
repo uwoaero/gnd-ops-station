@@ -1,42 +1,12 @@
-//import kafka library
-import { Kafka } from 'kafkajs'
+//import kafka capabilities
+const { setupKafka, subscribe, consume } = require('./filename')
 
-// import {setupKafka, subscribe, consume } from "./kafkaConsumer"
-
-//initializes kafka connection for this consumer
-const kafka = new Kafka({
-  clientId: 'gnd-station-frontend',
-  brokers: ['broker:29092'],
-})
-
-const consume = async () => {
-
-  //create consumer instance to be part of a consumer group
-  const consumer = kafka.consumer({ groupId: 'gnd-station-group' })
-
-  //connect to broker
-  await consumer.connect()
-
-  //subscribe to telemetry topic
-  await consumer.subscribe({ topic: 'telemetry', fromBeginning: true })
-  
-  //start consuming messages and printing in console
-  await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
-      if(message.value){
-        console.log({
-          value: message.value.toString(),
-        })
-      } else {
-        console.log("damn")
-      }
-    },
-  })
-}
-
+//setup kafka connection
+const kafka = setupKafka()
+const consumer = subscribe(kafka)
 
 export default function Home() {
-  consume()
+  consume(consumer)
 
   return (
     <div>

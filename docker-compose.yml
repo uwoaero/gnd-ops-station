@@ -42,8 +42,10 @@ services:
     build:
       context: ./
       dockerfile: dockerfiles/Dockerfile.backend
-    # env_file:
-    #   - ./backend/.env
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
   
   frontend:
     build:

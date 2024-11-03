@@ -1,6 +1,9 @@
 //import kafka library
 import { Kafka } from 'kafkajs'
 
+import express from "express"
+const app = express();
+
 //initializes kafka connection for this consumer
 const kafka = new Kafka({
   clientId: 'backend',
@@ -31,3 +34,16 @@ const consume = async () => {
 
 //catch any errors
 consume().catch(console.error);
+
+app.get('/', (req, res) => {
+  res.send('<h1>SEVERRRRRRRRRRRr</h1>');
+});
+
+import recordingRoutes from "./routes/record.js"
+app.use("/record", recordingRoutes)
+
+// Example specifying the port and starting the server
+const port = 5000
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
