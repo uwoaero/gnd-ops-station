@@ -1,5 +1,5 @@
 //import kafka capabilities
-const { setupKafka, subscribe, consume } = require('./filename')
+const { setupKafka, subscribe, consume } = require('./kafkaConsumer.js')
 
 //setup kafka connection
 const kafka = setupKafka()

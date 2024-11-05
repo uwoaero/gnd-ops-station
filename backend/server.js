@@ -21,13 +21,16 @@ const consume = async () => {
 
   //subscribe to telemetry topic
   await consumer.subscribe({ topic: 'telemetry', fromBeginning: true })
-  
+
   //start consuming messages and printing in console
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.log({
-        value: message.value.toString(),
-      })
+      if (isRunning) {
+        console.log({
+          tag: tag,
+          value: message.value.toString(),
+        })
+      }
     },
   })
 }
@@ -35,15 +38,66 @@ const consume = async () => {
 //catch any errors
 consume().catch(console.error);
 
+let isRunning = false;
+let tag = 0;
+
 app.get('/', (req, res) => {
   res.send('<h1>SEVERRRRRRRRRRRr</h1>');
 });
 
-import recordingRoutes from "./routes/record.js"
-app.use("/record", recordingRoutes)
-
 // Example specifying the port and starting the server
 const port = 5000
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
+
+app.get('/start', (req, res) => {
+  if (isRunning) {
+    return res.status(400).json({
+      message: 'already running',
+    });
+  }
+
+  isRunning = true;
+  tag = new Date();
+
+  res.json({
+    message: 'started',
+  });
+});
+
+app.get('/stop', (req, res) => {
+  if (!isRunning) {
+    return res.status(400).json({
+      message: 'Counter is not running',
+    });
+  }
+
+  isRunning = false;
+
+  res.json({
+    message: 'stopped',
+  });
+});
+
+app.get('/status', (req, res) => {
+  res.json({
+    isRunning: isRunning,
+  });
+});
+
+let dataType = "dummy"
+
+app.get("/dummydata", (req, res) => {
+  dataType = "dummy"
+  res.json({
+    dataType: dataType,
+  });
+})
+
+app.get("/realdata", (req, res) => {
+  dataType = "real"
+  res.json({
+    dataType: dataType,
+  });
+})
