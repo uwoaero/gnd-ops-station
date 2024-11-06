@@ -20,25 +20,7 @@ def startKafka():
 def sendData(data, producer):
     producer.send("telemetry", data)
 
-#connect to flight controller using mavlink
-# def connect():
-#     print("connecting...")
-#     connection = mavutil.mavlink_connection('com9')
-#     print("awating heartbeat")
-#     connection.wait_heartbeat()
-#     print("yippee")
 
-#     return connection
-
-#requests data stream from the flight controller
-# # def requestData(connection):
-#     connection.mav.request_data_stream_send(
-#         connection.target_system,
-#         connection.target_component,
-#         mavutil.mavlink.MAV_DATA_STREAM_ALL,
-#         30,
-#         1 
-#     )
 
 # Dummy data generator function
 def generate_multiple_dummy_data(producer, seconds=20):
@@ -72,16 +54,9 @@ def generate_multiple_dummy_data(producer, seconds=20):
 
 
 def main():
-    # #connect to flight controller and kafka
-    # connection = connect()
+    
     producer = startKafka()
-
-    # #receive data
-    # requestData(connection)
-    # getData(connection, producer)
     producer.flush()
     generate_multiple_dummy_data(producer)
-
-
 if __name__ == "__main__":
     main()
