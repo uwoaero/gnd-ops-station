@@ -23,18 +23,8 @@ def sendData(data, producer):
 
 
 # Dummy data generator function
-def generate_multiple_dummy_data(producer, seconds=20):
-    data = {
-        "ground_speed": [],
-        "air_speed": [],
-        "battery_voltage": [],
-        "longitude": [],
-        "latitude": [],
-        "altitude": [],
-        "timestamp": []
-    }
-
-    for _ in range(seconds):
+def generate_multiple_dummy_data(producer):
+    while True:
         snapshot = {
             "ground_speed": round(random.uniform(10, 50), 2),
             "air_speed": round(random.uniform(10, 80), 2),
@@ -47,8 +37,7 @@ def generate_multiple_dummy_data(producer, seconds=20):
 
         # Send the snapshot to Kafka
         sendData(snapshot, producer)
-        print(f"Sent to Kafka: {snapshot}")
-
+        print(f"Sent to Kafka: {json.dumps(snapshot)}")
         
         time.sleep(1)
 
@@ -58,5 +47,6 @@ def main():
     producer = startKafka()
     producer.flush()
     generate_multiple_dummy_data(producer)
+    
 if __name__ == "__main__":
     main()

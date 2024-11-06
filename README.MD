@@ -22,7 +22,9 @@
 
 3. View Frontend at localhost:3000
     
-### Setting up a Python Virtual Environment
+4. Backend is hosted at localhost:5000
+
+### For telemetry injestion only:
 
 1. Create a virtual environment:
    ```
@@ -39,22 +41,15 @@
    pip install -r requirements.txt
    ```
 
-### Start Ingestion
+4. Plug in flight controller to usb or usb-c
 
-1. Plug in flight controller to usb or usb-c
-
-2. Find USB port name:
+5. Find USB port name:
     - Windows: check "Ports (COM & PLT)" in Device Manager
     - Mac: idk but probably some "/dev/tty" thing
 
-3. Edit connection_string in ground-station.py
+6. Edit connection_string in telemetry-injestion.py
 
-3. Start ingestion script:
+7. Start ingestion script:
     ```
-    python ground-station.py
-    ```
-
-4. Start js server:
-    ```
-    node server.js
+    python telemetry-injestion.py
     ```
