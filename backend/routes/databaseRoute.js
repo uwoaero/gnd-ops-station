@@ -12,8 +12,7 @@ import express from "express"
 const router = express.Router();
 
 //queries Telemetry bucket
-const myQuery = async (id) => {
-  const fluxQuery = 'from(bucket: "Telemetry") |> range(start: 0)'
+const myQuery = async (fluxQuery) => {
   const flights = []
 
   //list all items 
@@ -30,34 +29,48 @@ const myQuery = async (id) => {
 
 //returns all flights
 router.get("/flights", async (req, res) => {
-  const flights = []
+  const allQuery = 'from(bucket: "Telemetry") |> range(start: 0) |> filter(fn: (r) => r._measurement == "flight" and r._field == "tag")'
 
   //queries entire database
-  const query = await myQuery()
+  const query = await myQuery(allQuery)
   console.log(query)
 
-  //only get unique flght ids... doesn't work
-  for (let i = 0; i < query.length; i++) {
-    console.log(query[i].flight_id)
-    flights.push(query[i].flight_id)
-  }
+  //only get unique flght ids
+
+  const flights_ids = new Set();
+
+  const flights = query.filter(flight => {
+    const { flight_id } = flight;
+
+    if (!flights_ids.has(flight_id)) {
+      flights_ids.add(flight_id)
+      return true
+    } else {
+      return false
+    }
+
+  })
 
   res.json({ flights: flights })
 })
 
 //get specific flight data
 router.get("/:flight_id", async (req, res) => {
+  const id = req.params.flight_id
+  let selectedFlight = "invalid"
 
-  const flights = await myQuery()
-  const selectedFlight = []
+  if(id.length == 16){
+    const flightQuery = `from(bucket: "Telemetry") |> range(start: 0) |> filter(fn: (r) => r._measurement == "flight" and r.flight_id == "${id}")`
 
-  for (let i = 0; i < flights.length; i++) {
-    if(req.params.flight_id == flights[i].id){
-      selectedFlight.push(flights[i])
-    }
+    selectedFlight = await myQuery(flightQuery)
+    console.log(selectedFlight)
+  
+  } else {
+    selectedFlight = "invalid"
   }
-
   res.json({ selectedFlight: selectedFlight })
+
+
 })
 
 export default router;

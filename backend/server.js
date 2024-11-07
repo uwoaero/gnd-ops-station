@@ -44,7 +44,7 @@ const consume = async () => {
         //SEND TO FRONTEND VIA WEBSOCKET
 
         //if saving to database
-        if (getIsRunning() && getDataType == "telemetry") {
+        if (getIsRunning() && getDataType() == "telemetry") {
 
           //save to influx as a Point
           const point = new Point('flight')
