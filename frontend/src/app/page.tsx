@@ -1,12 +1,4 @@
-//import kafka capabilities
-const { setupKafka, subscribe, consume } = require('./kafkaConsumer.js')
-
-//setup kafka connection
-const kafka = setupKafka()
-const consumer = subscribe(kafka)
-
 export default function Home() {
-  consume(consumer)
 
   return (
     <div>
