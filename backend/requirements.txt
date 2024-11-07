@@ -1,0 +1,5 @@
+influxdb-client==1.47.0
+pymavlink==2.4.41
+pyserial==3.5
+python-dotenv==1.0.1
+kafka-python-ng==2.2.3

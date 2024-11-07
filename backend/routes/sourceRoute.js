@@ -2,11 +2,12 @@ import express from "express"
 const router = express.Router();
 
 //default use dummy data
-let dataType = "dummy"
+let dataType = "test-telemetry"
+const getDataType = () => { return dataType }
 
 //sets dummy as data source
-router.get("/dummy", (req, res) => {
-  dataType = "dummy"
+router.get("/test", (req, res) => {
+  dataType = "test-telemetry"
   res.json({
     dataType: dataType,
   });
@@ -14,10 +15,10 @@ router.get("/dummy", (req, res) => {
 
 //sets flight controller as data source
 router.get("/real", (req, res) => {
-  dataType = "real"
+  dataType = "telemetry"
   res.json({
     dataType: dataType,
   });
 })
 
-export {router, dataType};
+export {router, getDataType};

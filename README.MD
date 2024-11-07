@@ -24,6 +24,8 @@
     
 4. Backend is hosted at localhost:5000
 
+The ground station generates dummy data by default.
+
 ### For telemetry injestion only:
 
 1. Create a virtual environment:

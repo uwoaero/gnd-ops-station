@@ -57,6 +57,12 @@ services:
       - broker
     # links:
       # - backend
+  testdata:
+    build:
+      context: ./
+      dockerfile: dockerfiles/Dockerfile.testdata
+    depends_on:
+      - broker
 
       
 volumes:
