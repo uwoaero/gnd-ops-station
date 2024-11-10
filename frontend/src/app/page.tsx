@@ -1,10 +1,58 @@
 'use client'
 
-import Button from './components/Button';
+// import Button from './components/Button';
 import Dropdown from './components/Dropdown';
 import GroundStationStatus from "./components/GroundStationStatus";
+import { useEffect, useState } from 'react';
+
+
 
 export default function Home() {
+
+  const [telemetry, setTelemetry] = useState({
+    ground_speed: "-",
+    air_speed: "-",
+    battery_voltage: "-",
+    lon_lat: "-",
+    altitude: "-",
+  });
+
+  useEffect(() => {
+    //const backendUrl = process.env.NEXT_PUBLIC_WS_URL || '';
+    const socket = new WebSocket('ws://localhost:5000');
+
+    socket.onopen = () => {
+      console.log("Connected to WebSocket server");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("Received telemetry data:", event.data);
+
+      // Update telemetry state
+      setTelemetry({
+        ground_speed: data.ground_speed || "-",
+        air_speed: data.air_speed || "-",
+        battery_voltage: data.battery_voltage || "-",
+        lon_lat: `${data.longitude || "-"}, ${data.latitude || "-"}`,
+        altitude: data.altitude || "-",
+      });
+
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+    
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    return () => {
+      socket.close(); // Cleanup WebSocket connection on unmount
+    };
+  }, []);
+
 
   return (
     <div className={`w-full min-h-screen bg-black-200 text-white flex flex-col items-center`}>
@@ -29,11 +77,11 @@ export default function Home() {
         <div className="bg-white text-black rounded-lg shadow-md p-8 flex-1 space-y-4 min-h-[250px]">
           <h2 className="text-lg font-bold text-center">Metrics</h2>
           <div className="space-y-2">
-            <p><strong>Ground Speed:</strong> <span id="ground-speed">-</span></p>
-            <p><strong>Air Speed:</strong> <span id="air-speed">-</span></p>
-            <p><strong>Battery Voltage:</strong> <span id="battery-voltage">-</span></p>
-            <p><strong>Longitude/Latitude:</strong> <span id="lon-lat">-</span></p>
-            <p><strong>Altitude:</strong> <span id="altitude">-</span></p>
+          <p><strong>Ground Speed:</strong> {telemetry.ground_speed}</p>
+          <p><strong>Air Speed:</strong> {telemetry.air_speed}</p>
+          <p><strong>Battery Voltage:</strong> {telemetry.battery_voltage}</p>
+          <p><strong>Longitude/Latitude:</strong> {telemetry.lon_lat}</p>
+          <p><strong>Altitude:</strong> {telemetry.altitude}</p>
           </div>
         </div>
 
