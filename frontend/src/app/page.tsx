@@ -1,66 +1,92 @@
 'use client'
-
-import { useEffect, useState } from 'react';
+import axios from "axios";
 import Button from './components/Button';
 import Dropdown from './components/Dropdown';
 import GroundStationStatus from "./components/GroundStationStatus";
 
 
-export default function Home() {
-  const [recordingStatus, setRecordingStatus] = useState(false);
+//Created Api call for button
+const startRecording = async () => {
+  console.log()
 
-  const changeRecording = () => {
-    if (recordingStatus) {
-      setRecordingStatus(false)
-    } else {
-      setRecordingStatus(true)
-    }
+  const response = await axios.get(`http://localhost:5000/record/start`)
+  const data = await response.data;
+}
+
+//Created Api call for buton
+
+const stopRecording = async()=> {
+  console.log()
+  const response = await axios.get('http://localhost:5000/record/stop')
+  const data = await response.data;
+  
+  console.log(data)
+} //Created Api call for dropdown 
+const FlightController = async () => {
+      console.log()
+      const response = await axios.get("http://localhost:5000/source/real");
+      const data = await response.data;  
+}
+  //Created Api call for dropdown
+const DummyDatabase = async () => {
+      console.log()
+      const response = await axios.get("http://localhost:5000/source/test");
+      const data = await response.data;    
+}
+  // Handle the change event for the dropdown
+
+const handleDropdownChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const selectedValue = e.target.value;
+
+  // Call the corresponding function based on the selected value
+  if (selectedValue === "flightController") {
+    await FlightController();
+  } else if (selectedValue === "dummyDatabase") {
+    await DummyDatabase();
   }
+};
+export default function Home() {
 
   return (
-    <div className={`h-screen w-screen overflow-hidden bg-black-200 text-white flex flex-col items-center bg-green-50	`}>
-      <div className="flex items-center">
-        <h1 className="font-bold text-6xl text-center p-8 text-black">Ground Station</h1>
-        <img src="/logo.png" alt="Logo" className="h-20 mb-0" />
+    <div className={`w-full min-h-screen bg-black-200 text-white flex flex-col items-center`}>
+      <div className="flex flex-col items-center">
+        <img src="/logo.png" alt="Logo" className="h-20 mb-0" /> 
+        <h1 className="text-xl text-center">Ground Station Interface</h1>
       </div>
-      <div className='flex w-full h-full'>
-        <div className='w-5/12'>
-          <div className="text-gray-800 font-normal  rounded-lg flex-1 space-y-4 h-2/3 px-8">
-              <div className="text-4xl h-full border-0 border-b-2  ">
-              <p className='py-4'><strong>Ground Speed:</strong> </p>
-              <p className='py-4'><strong>Air Speed:</strong> </p>
-              <p className='py-4'><strong>Battery Voltage:</strong></p>
-              <p className='py-4'> <strong>Longitude:</strong> </p>
-              <p className='py-4'><strong>Latitude:</strong> </p>
-              <p className='py-4'><strong>Altitude:</strong></p>
-            </div>
-          </div>
-          <div className="rounded-lg shadow-md w-full h-1/3">
-            <div className='flex items-center justify-center'>
-              <h1 className="text-black font-normal">Select Data Source: </h1>
-              <Dropdown className="h-20 px-4"></Dropdown>
-            </div>
-            <div className='flex items-center justify-center pb-2'>
-              <GroundStationStatus recording={recordingStatus}></GroundStationStatus>
 
-            </div>
-            <div className='flex items-center justify-center py-4 text-xl'>
-              <button className={`${recordingStatus ? "bg-red-600 hover:bg-red-500" : "bg-emerald-600 hover:bg-emerald-500"} mx-4 p-6 py-4 rounded-lg font-semibold focus:outline-none text-white`} onClick={changeRecording}>{recordingStatus ? "Stop Recording" : "Start Recording"}</button>
-              <button className="p-6 py-4 mx-4 rounded-lg bg-sky-950 font-semibold text-white hover:bg-sky-800" onClick={() => alert('Going to Database')}>View Database</button>
-              <button className="p-6 py-4 mx-4 rounded-lg bg-sky-950 font-semibold text-white hover:bg-sky-800" onClick={() => alert('Starting Recording')}>Manage Database</button>
-            </div>
+      <div className="bg-gray-700 text-white rounded-lg shadow-md w-full p-6 mx-8 mt-1"> 
+        <h2 className="text-lg font-bold text-center">Recording and Database</h2>
+        <p className="text-gray-300 text-center mt-2">Use the buttons below to control the system.</p>
+        <div className="flex gap-4 mt-6 justify-center">
+          <GroundStationStatus></GroundStationStatus>
+          <button className="px-4 py-2 h-10 rounded focus:outline-none focus:ring focus:ring-opacity-50 bg-blue-500 text-white hover:bg-blue-600" onClick={() => alert('Going to Database')}>Go to Database</button>
+          <button className="px-4 py-2 h-10 rounded focus:outline-none focus:ring focus:ring-opacity-50 bg-green-500 text-white hover:bg-green-600" onClick={startRecording}>Start Recording</button>
+          <button className="px-4 py-2 h-10 rounded focus:outline-none focus:ring focus:ring-opacity-50 bg-red-500 text-white hover:bg-red-600" onClick={stopRecording}>Stop Recording</button>
+          <Dropdown className="mt-[-10px]" onChange={handleDropdownChange}></Dropdown>
+        </div>
+      </div>
+
+      <div className="flex flex-grow w-full px-8 gap-8 mt-2">
+        <div className="bg-white text-black rounded-lg shadow-md p-8 flex-1 space-y-4 min-h-[250px]">
+          <h2 className="text-lg font-bold text-center">Metrics</h2>
+          <div className="space-y-2">
+            <p><strong>Ground Speed:</strong> <span id="ground-speed">-</span></p>
+            <p><strong>Air Speed:</strong> <span id="air-speed">-</span></p>
+            <p><strong>Battery Voltage:</strong> <span id="battery-voltage">-</span></p>
+            <p><strong>Longitude/Latitude:</strong> <span id="lon-lat">-</span></p>
+            <p><strong>Altitude:</strong> <span id="altitude">-</span></p>
           </div>
         </div>
-        <div className='w-7/12 h-full'>
+
+        <div className="flex flex-col flex-1 space-y-4 min-h-[250px]">
           <div className="bg-gray-800 rounded-lg shadow-md w-full h-1/2 flex items-center justify-center">
             <p className="text-gray-400">FPV View</p>
           </div>
           <div className="bg-gray-800 rounded-lg shadow-md w-full h-1/2 flex items-center justify-center">
-            <p className="text-gray-400">Yaw/Pitch/Roll Visualizer</p>
+            <img src="/model-plane.jpg" alt="Model Plane" className="object-contain w-full h-full" />
           </div>
         </div>
       </div>
-
     </div>
   );
 }
