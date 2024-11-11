@@ -33,7 +33,7 @@ router.get("/flights", async (req, res) => {
 
   //queries entire database
   const query = await myQuery(allQuery)
-  console.log(query)
+  // console.log(query)
 
   //only get unique flght ids
 
@@ -63,7 +63,7 @@ router.get("/:flight_id", async (req, res) => {
     const flightQuery = `from(bucket: "Telemetry") |> range(start: 0) |> filter(fn: (r) => r._measurement == "flight" and r.flight_id == "${id}")`
 
     selectedFlight = await myQuery(flightQuery)
-    console.log(selectedFlight)
+    // console.log(selectedFlight)
   
   } else {
     selectedFlight = "invalid"

@@ -37,7 +37,7 @@ def generate_multiple_dummy_data(producer):
 
         # Send the snapshot to Kafka
         sendData(snapshot, producer)
-        print(f"Sent to Kafka: {json.dumps(snapshot)}")
+        print(f"Sent to kafka: {json.dumps(snapshot)}")
         
         time.sleep(1)
 

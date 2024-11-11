@@ -8,6 +8,10 @@ import 'dotenv/config'
 
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
 
+import cors from 'cors';
+app.use(cors());
+console.log("using cors...")
+
 const bucket = "Telemetry"
 const org = "westernaerodesign"
 const url = "http://influxdb:8086"
@@ -44,7 +48,8 @@ const consume = async () => {
         //SEND TO FRONTEND VIA WEBSOCKET
 
         //if saving to database
-        if (getIsRunning() && getDataType() == "telemetry") {
+        if (getIsRunning() && getDataType() == "test-telemetry") {
+          const time = new Date()
 
           //save to influx as a Point
           const point = new Point('flight')
@@ -56,6 +61,7 @@ const consume = async () => {
             .floatField('latitude', parseFloat(data.latitude))
             .floatField('altitude', parseFloat(data.altitude))
             .stringField("tag", getTag().toLocaleString())
+            .stringField("data_time", time.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour12: false }))
           console.log(` ${point}`)
 
           writeApi.writePoint(point)

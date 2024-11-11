@@ -1,32 +1,15 @@
-'use client'
-import { useState, useEffect } from 'react';
-
-function GroundStationStatus() {
-  const [isRecording, setIsRecording] = useState(false);
-
-  useEffect(() => {
-    const checkRecordingStatus = async () => {
-      const recordingStatus = await fetchRecordingStatus();
-      setIsRecording(recordingStatus);
-    };
-
-    checkRecordingStatus();
-  }, []);
-
-  const fetchRecordingStatus = async () => {
-    return true;
-  };
+function GroundStationStatus({recording}) {
 
   return (
-    <div style={{ padding: '20px', fontSize: '18px' }}>
-      <p>
-        Ground Station Status: 
+    <div className="px-2">
+      <p className="text-black text-xl font-bold">
+        Status: 
         <span style={{ 
-          color: isRecording ? 'green' : 'red', 
+          color: recording ? 'green' : 'red', 
           fontWeight: 'bold', 
           marginLeft: '8px' 
         }}>
-          {isRecording ? 'Recording' : 'Not Recording'}
+          {recording ? 'Recording' : 'Not Recording'}
         </span>
       </p>
     </div>
