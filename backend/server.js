@@ -78,7 +78,7 @@ const consume = async () => {
         console.log("Kafka message received:", data); // Log received Kafka messages
 
         //SEND TO FRONTEND VIA WEBSOCKET
-        broadcast(data)
+        broadcast(data) 
         //if saving to database
         if (getIsRunning() && getDataType() == "test-telemetry") {
           const time = new Date()
