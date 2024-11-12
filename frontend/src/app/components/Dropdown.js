@@ -1,5 +1,5 @@
 // components/Dropdown.js
-const Dropdown = ({ className }) => {
+const Dropdown = ({ className,onChange }) => {
     return (
       <div className={`relative ${className}`}>
         <label htmlFor="options" className="block text-sm font-medium text-white mb-1">
@@ -8,6 +8,7 @@ const Dropdown = ({ className }) => {
         <select
           id="options"
           className="bg-gray-700 text-white p-2 rounded-lg"
+          onChange={onChange}
         >
           <option value="" disabled>Select an option</option>
           <option value="Option 1">Flight Controller</option>

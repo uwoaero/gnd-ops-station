@@ -78,7 +78,7 @@ export default function Home() {
           <div className="rounded-lg shadow-md w-full h-1/3">
             <div className='flex items-center justify-center'>
               <h1 className="text-black font-normal">Select Data Source: </h1>
-              <Dropdown className="h-20 px-4"></Dropdown>
+              <Dropdown className="h-20 px-4" onChange={undefined}></Dropdown>
             </div>
             <div className='flex items-center justify-center pb-2'>
               <GroundStationStatus recording={recordingStatus}></GroundStationStatus>
