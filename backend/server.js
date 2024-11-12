@@ -8,6 +8,9 @@ import 'dotenv/config'
 
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
 
+import { WebSocketServer } from "ws";
+import http from 'http';
+
 import cors from 'cors';
 app.use(cors());
 console.log("using cors...")
@@ -17,6 +20,33 @@ const org = "westernaerodesign"
 const url = "http://influxdb:8086"
 const influxdb = new InfluxDB({ url: url, token: process.env.INFLUXDB_TOKEN })
 const writeApi = influxdb.getWriteApi(org, bucket)
+
+// Websocket configuration
+const nodePort = process.env.WS_PORT || 5001;
+const nodeEnv = process.env.NODE_ENV || 'development';
+// Create HTTP Server
+const server = http.createServer(app);
+//Websocket intialization
+const ws = new WebSocketServer({ server })
+ws.on("connection", (socket) => {
+  console.log(`WebSocket client connected: ${socket._socket.remoteAddress}`);
+  socket.send(JSON.stringify({ test: "WebSocket test message" }));
+  socket.on("close", (code) => {
+    console.log(`WebSocket client disconnected (code: ${code})`);
+  });
+  socket.on("error", (error) => {
+    console.error("WebSocket error:", error);
+  });
+});
+// Broadcast Function
+const broadcast = (data) => {
+  console.log("Broadcasting data to WebSocket clients:", data);
+  ws.clients.forEach((client) => {
+    if (client.readyState === client.OPEN) {
+      client.send(JSON.stringify(data));
+    }
+  });
+};
 
 //initializes kafka connection for this consumer
 const kafka = new Kafka({
@@ -45,8 +75,10 @@ const consume = async () => {
         //get message
         const data = JSON.parse(message.value.toString())
 
-        //SEND TO FRONTEND VIA WEBSOCKET
+        console.log("Kafka message received:", data); // Log received Kafka messages
 
+        //SEND TO FRONTEND VIA WEBSOCKET
+        broadcast(data)
         //if saving to database
         if (getIsRunning() && getDataType() == "test-telemetry") {
           const time = new Date()
@@ -76,10 +108,9 @@ app.get('/', (req, res) => {
   res.send('<h1>SEVERRRRRRRRRRRr</h1>');
 });
 
-const port = 5000
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+server.listen("5000", () => {
+  console.log(`Server started on port 5000 in mode ${nodeEnv}`)
+})
 
 import databaseRoutes from "./routes/databaseRoute.js"
 app.use("/database", databaseRoutes)
